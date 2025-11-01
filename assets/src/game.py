@@ -9,27 +9,28 @@ SCREEN_HEIGHT = 480  # in pixels
 FPS = 30
 
 
-def run():
-    pygame.init()
+class Game:
+    def __init__(self):
+        pygame.init()
 
-    Screen.init(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
-    Screen.set_window_title("Ninja game")
-    Time.set_fps(FPS)
+        Screen.init(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+        Screen.set_window_title("Ninja game")
 
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+        Time.set_fps(FPS)
 
-        Time._tick()
-        # Input.tick_Internal(Time.getDeltaTime())
+    def run(self):
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
 
-        Screen.repaint()
+            Time.tick()
+            Screen.repaint()
 
-    pygame.quit()
-    sys.exit()
+        pygame.quit()
+        sys.exit()
 
 
 if __name__ == "__main__":
-    run()
+    Game().run()

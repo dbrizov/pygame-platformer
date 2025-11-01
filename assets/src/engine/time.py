@@ -8,7 +8,7 @@ class Time:
     _time_scale = 1.0
 
     @staticmethod
-    def _tick():
+    def tick():
         milliseconds = Time._clock.tick(Time._fps)
         Time._play_time += milliseconds / 1000.0
 
