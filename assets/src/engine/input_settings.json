@@ -1,0 +1,55 @@
+{
+    "action_mappings": {
+        "left": [
+            "K_LEFT",
+            "K_a"
+        ],
+        "right": [
+            "K_RIGHT",
+            "K_d"
+        ],
+        "up": [
+            "K_UP",
+            "K_w"
+        ],
+        "down": [
+            "K_DOWN",
+            "K_s"
+        ],
+        "submit": [
+            "K_RETURN"
+        ],
+        "cancel": [
+            "K_ESCAPE"
+        ],
+        "pause": [
+            "K_SPACE"
+        ]
+    },
+    "axis_mappings": {
+        "horizontal": {
+            "acceleration": 3,
+            "deceleration": 3,
+            "positive": [
+                "K_RIGHT",
+                "K_d"
+            ],
+            "negative": [
+                "K_LEFT",
+                "K_a"
+            ]
+        },
+        "vertical": {
+            "acceleration": 3,
+            "deceleration": 3,
+            "positive": [
+                "K_UP",
+                "K_w"
+            ],
+            "negative": [
+                "K_DOWN",
+                "K_s"
+            ]
+        }
+    }
+}
