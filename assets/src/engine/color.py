@@ -1,4 +1,16 @@
 class Color(tuple):
+    NONE: "Color"
+    BLACK: "Color"
+    WHITE: "Color"
+    GRAY: "Color"
+    RED: "Color"
+    GREEN: "Color"
+    BLUE: "Color"
+    YELLOW: "Color"
+    MAGENTA: "Color"
+    CYAN: "Color"
+    ORANGE: "Color"
+
     def __new__(cls, r, g, b, a=255):
         return tuple.__new__(cls, (r, g, b, a))
 

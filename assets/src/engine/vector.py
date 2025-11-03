@@ -2,6 +2,8 @@ import math
 
 
 class Vector2(tuple):
+    ZERO: "Vector2"
+
     def __new__(cls, x, y):
         return tuple.__new__(cls, (x, y))
 

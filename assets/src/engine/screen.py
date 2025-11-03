@@ -1,9 +1,10 @@
 import pygame.display
+from pygame import Surface
 from engine.vector import Vector2
 
 
 class Screen:
-    _surface = None
+    _surface: Surface
 
     @staticmethod
     def init(width: int, height: int, flags=0, depth=0):
