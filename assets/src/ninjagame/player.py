@@ -15,4 +15,3 @@ class PlayerEntity(Entity):
         self._input_component.bind_action("right", InputEvent.EVENT_TYPE_PRESSED, lambda: print("right"))
         self._input_component.bind_action("up", InputEvent.EVENT_TYPE_PRESSED, lambda: print("up"))
         self._input_component.bind_action("down", InputEvent.EVENT_TYPE_PRESSED, lambda: print("down"))
-        self._input_component.bind_axis("horizontal", lambda axis: print(f"{axis}"))

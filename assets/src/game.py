@@ -1,4 +1,3 @@
-import sys
 import pygame
 from engine.screen import Screen
 from engine.time import Time
@@ -46,7 +45,6 @@ class Game:
             Screen.repaint()
 
         pygame.quit()
-        sys.exit()
 
 
 if __name__ == "__main__":
