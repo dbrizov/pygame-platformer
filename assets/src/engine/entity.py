@@ -5,8 +5,7 @@ from sortedcontainers import SortedSet
 
 class Entity:
     def __init__(self, priority=0, initial_components=None):
-        """
-        Represents an entity (game object) in the game
+        """Represents an entity (game object) in the game
 
         `priority` -> the `priority` indicated in which order the entities will be updated.
         If entity `A` has `priority=0`, and entity `B` has `priority=1`, `A` will be updated before `B`.

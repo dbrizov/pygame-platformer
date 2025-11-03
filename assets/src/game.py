@@ -3,29 +3,13 @@ import pygame
 from engine.screen import Screen
 from engine.time import Time
 from engine.input import Input
-from engine.input import InputEvent
-from engine.entity import Entity
 from engine.entity import EntitySpawner
-from engine.components import InputComponent
+from ninjagame.player import PlayerEntity
 
 
 SCREEN_WIDTH = 640  # in pixels
 SCREEN_HEIGHT = 480  # in pixels
 FPS = 60
-
-
-class PlayerEntity(Entity):
-    def __init__(self, priority=0, initial_components=None):
-        super().__init__(priority, initial_components)
-
-    def init(self):
-        super().init()
-
-        self._input_component: InputComponent = self.add_component(InputComponent())
-        self._input_component.bind_action("left", InputEvent.EVENT_TYPE_PRESSED, lambda: print("left"))
-        self._input_component.bind_action("right", InputEvent.EVENT_TYPE_PRESSED, lambda: print("right"))
-        self._input_component.bind_action("up", InputEvent.EVENT_TYPE_PRESSED, lambda: print("up"))
-        self._input_component.bind_action("down", InputEvent.EVENT_TYPE_PRESSED, lambda: print("down"))
 
 
 class Game:
@@ -51,7 +35,13 @@ class Game:
             EntitySpawner._resolve_entity_spawn_requests()
             EntitySpawner._resolve_entity_destroy_requests()
 
-            Input._tick(Time.get_delta_time())
+            delta_time = Time.get_delta_time()
+            time_scale = Time.get_time_scale()
+
+            Input._tick(delta_time)
+
+            for entity in EntitySpawner.get_entities():
+                entity.tick(delta_time * time_scale)
 
             Screen.repaint()
 

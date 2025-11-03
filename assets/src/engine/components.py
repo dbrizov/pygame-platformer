@@ -14,8 +14,7 @@ class ComponentPriority:
 
 class Component(object):
     def __init__(self):
-        """
-        The components in the `entity_component_list` of an `entity` are sorted by their `priority`.
+        """The components in the `entity_component_list` of an `entity` are sorted by their `priority`.
         **The `priority` cannot be changed at runtime**
         """
         self._priority = ComponentPriority.DEFAULT_COMPONENT
