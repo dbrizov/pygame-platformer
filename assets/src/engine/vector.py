@@ -15,19 +15,19 @@ class Vector2(tuple[float, float, float, float]):
     def y(self):
         return self[1]
 
-    def __add__(self, other: "Vector2") -> "Vector2":
+    def __add__(self, other: "Vector2") -> "Vector2":  # type: ignore[override]
         return Vector2(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: "Vector2") -> "Vector2":
+    def __sub__(self, other: "Vector2") -> "Vector2":  # type: ignore[override]
         return Vector2(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, scalar: float) -> "Vector2":
+    def __mul__(self, scalar: float) -> "Vector2":  # type: ignore[override]
         return Vector2(self.x * scalar, self.y * scalar)
 
-    def __truediv__(self, scalar: float) -> "Vector2":
+    def __truediv__(self, scalar: float) -> "Vector2":  # type: ignore[override]
         return Vector2(self.x / scalar, self.y / scalar)
 
-    def __eq__(self, other: "Vector2") -> bool:
+    def __eq__(self, other: "Vector2") -> bool:  # type: ignore[override]
         return self.x == other.x and self.y == other.y
 
     def __str__(self):

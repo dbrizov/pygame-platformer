@@ -30,16 +30,16 @@ class Color(tuple[int, int, int, int]):
     def a(self):
         return self[3]
 
-    def __add__(self, color: "Color") -> "Color":
+    def __add__(self, color: "Color") -> "Color":  # type: ignore[override]
         return Color(self.r + color.r, self.g + color.g, self.b + color.b, self.a + color.a)
 
-    def __sub__(self, color: "Color") -> "Color":
+    def __sub__(self, color: "Color") -> "Color":  # type: ignore[override]
         return Color(self.r - color.r, self.g - color.g, self.b - color.b, self.a - color.a)
 
-    def __mul__(self, scalar: float) -> "Color":
+    def __mul__(self, scalar: float) -> "Color":  # type: ignore[override]
         return Color(int(self.r * scalar), int(self.g * scalar), int(self.b * scalar), int(self.a * scalar))
 
-    def __truediv__(self, scalar: float) -> "Color":
+    def __truediv__(self, scalar: float) -> "Color":  # type: ignore[override]
         return Color(int(self.r / scalar), int(self.g / scalar), int(self.b / scalar), int(self.a / scalar))
 
     def __str__(self):
