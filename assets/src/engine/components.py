@@ -57,6 +57,26 @@ class TransformComponent(Component):
         self.position = Vector2.ZERO
 
 
+class ImageComponent(Component):
+    def __init__(self, img_path: str | Path, color_key: Color = Color.BLACK, priority: int = ComponentPriority.RENDER_COMPONENT):
+        """An `Image Component` renders an image on the screen.
+
+        Params:
+            img_path (str): The path to the image asset so it can be loaded
+            color_key (Color): Transparent color key. All pixels matching this key will be transparent
+        """
+        super().__init__(priority)
+        self._image = pygame.image.load(img_path)
+        self._image.set_colorkey(color_key)
+
+    def tick(self, delta_time: float):
+        super().tick(delta_time)
+        entity = self.get_entity()
+        if entity is not None:
+            transform = entity.get_transform()
+            Screen.get_surface().blit(self._image, transform.position)
+
+
 class InputComponent(Component):
     def __init__(self, priority: int = ComponentPriority.INPUT_COMPONENT):
         """An `Input Component` enables an `Entity` to bind various forms of input events to delegate functions."""
@@ -115,23 +135,3 @@ class InputComponent(Component):
             if input_event.name in self._bound_functions_by_released_action:
                 for func in self._bound_functions_by_released_action[input_event.name]:
                     func()
-
-
-class ImageComponent(Component):
-    def __init__(self, img_path: str | Path, color_key: Color = Color.BLACK, priority: int = ComponentPriority.RENDER_COMPONENT):
-        """An `Image Component` renders an image on the screen.
-
-        Params:
-            img_path (str): The path to the image asset so it can be loaded
-            color_key (Color): Transparent color key. All pixels matching this key will be transparent
-        """
-        super().__init__(priority)
-        self._image = pygame.image.load(img_path)
-        self._image.set_colorkey(color_key)
-
-    def tick(self, delta_time: float):
-        super().tick(delta_time)
-        entity = self.get_entity()
-        if entity is not None:
-            transform = entity.get_transform()
-            Screen.get_surface().blit(self._image, transform.position)

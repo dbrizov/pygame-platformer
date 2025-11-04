@@ -1,9 +1,9 @@
 import pygame
 import json
 import os
-import engine.utils
-from engine.events import EventHook
 from enum import Enum
+from engine.utils import clamp
+from engine.events import EventHook
 
 from typing import Any
 
@@ -240,13 +240,13 @@ class Input:
             axis_value = Input._axis_values[axis]
             if (any_positive_key and any_negative_key) or (not (any_positive_key or any_negative_key)):
                 if axis_value < 0.0:
-                    axis_value = engine.utils.clamp(axis_value + axis_deceleration * delta_time, -1.0, 0.0)
+                    axis_value = clamp(axis_value + axis_deceleration * delta_time, -1.0, 0.0)
                 elif axis_value > 0.0:
-                    axis_value = engine.utils.clamp(axis_value - axis_deceleration * delta_time, 0.0, 1.0)
+                    axis_value = clamp(axis_value - axis_deceleration * delta_time, 0.0, 1.0)
             elif any_positive_key and not any_negative_key:
-                axis_value = engine.utils.clamp(axis_value + axis_acceleration * delta_time, -1.0, 1.0)
+                axis_value = clamp(axis_value + axis_acceleration * delta_time, -1.0, 1.0)
             elif any_negative_key and not any_positive_key:
-                axis_value = engine.utils.clamp(axis_value - axis_acceleration * delta_time, -1.0, 1.0)
+                axis_value = clamp(axis_value - axis_acceleration * delta_time, -1.0, 1.0)
 
             Input._axis_values[axis] = axis_value
             Input.on_input_event.invoke(InputEvent(axis, InputEventType.EVENT_TYPE_AXIS, axis_value))
