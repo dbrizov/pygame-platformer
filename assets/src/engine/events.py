@@ -1,18 +1,25 @@
+from typing import Callable
+from typing import Any
+
+
+EventDelegate = Callable[[Any], None]
+
+
 class EventHook():
     def __init__(self):
-        self._handlers = []
+        self._handlers: list[EventDelegate] = list()
 
-    def __add__(self, handler):
+    def __add__(self, handler: EventDelegate):
         self._handlers.append(handler)
         return self
 
-    def __sub__(self, handler):
+    def __sub__(self, handler: EventDelegate):
         self._handlers.remove(handler)
         return self
 
     def remove_all_handlers(self):
         self._handlers.clear()
 
-    def invoke(self, *args, **kwargs):
+    def invoke(self, *args: Any, **kwargs: Any):
         for handler in self._handlers:
             handler(*args, **kwargs)

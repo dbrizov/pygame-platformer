@@ -16,7 +16,7 @@ class Game:
         pygame.init()
 
         Screen.init(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
-        Screen.set_window_title("Ninja game")
+        Screen.set_window_title("Ninja Game")
 
         Time.set_fps(FPS)
 

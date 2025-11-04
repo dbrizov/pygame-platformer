@@ -3,6 +3,9 @@ import json
 import os
 import engine.utils
 from engine.events import EventHook
+from enum import Enum
+
+from typing import Any
 
 
 INPUT_SETTINGS_FILE_NAME = "input_settings.json"
@@ -145,27 +148,29 @@ KEY_NAMES_BY_KEY_CODE = {
 }
 
 
-def _get_input_settings():
+def _get_input_settings() -> Any:
     dir_path = os.path.dirname(os.path.realpath(__file__))
     file_path = f"{dir_path}/{INPUT_SETTINGS_FILE_NAME}"
     with open(file_path, "r") as file_stream:
         return json.load(file_stream)
 
 
-def _create_axis_values():
-    axis_values = dict()
+def _create_axis_values() -> dict[str, float]:
+    axis_values: dict[str, float] = dict()
     axis_mappings = _get_input_settings()[AXIS_MAPPINGS]
     for axis in axis_mappings:
         axis_values[axis] = 0.0
     return axis_values
 
 
-class InputEvent:
+class InputEventType(Enum):
     EVENT_TYPE_PRESSED = 0
     EVENT_TYPE_RELEASED = 1
     EVENT_TYPE_AXIS = 2
 
-    def __init__(self, name: str, type: int, axis_value: float = 0):
+
+class InputEvent:
+    def __init__(self, name: str, type: InputEventType, axis_value: float = 0):
         self.name = name
         self.type = type
         self.axis_value = axis_value
@@ -179,21 +184,21 @@ class Input:
 
     _input_settings = _get_input_settings()
     _axis_values = _create_axis_values()
-    _pressed_keys_this_frame = set()
-    _pressed_keys_last_frame = set()
+    _pressed_keys_this_frame: set[str] = set()
+    _pressed_keys_last_frame: set[str] = set()
 
     @staticmethod
-    def get_input_settings():
+    def get_input_settings() -> Any:
         return Input._input_settings
 
     @staticmethod
-    def get_action_mappings():
+    def get_action_mappings() -> dict[str, list[str]]:
         input_settings = Input.get_input_settings()
         action_mappings = input_settings[ACTION_MAPPINGS]
         return action_mappings
 
     @staticmethod
-    def get_axis_mappings():
+    def get_axis_mappings() -> dict[str, Any]:
         input_settings = Input.get_input_settings()
         axis_mappings = input_settings[AXIS_MAPPINGS]
         return axis_mappings
@@ -208,9 +213,9 @@ class Input:
         for action, keys in action_mappings.items():
             for key in keys:
                 if (key in Input._pressed_keys_this_frame) and not (key in Input._pressed_keys_last_frame):
-                    Input.on_input_event.invoke(InputEvent(action, InputEvent.EVENT_TYPE_PRESSED))
+                    Input.on_input_event.invoke(InputEvent(action, InputEventType.EVENT_TYPE_PRESSED))
                 elif (key in Input._pressed_keys_last_frame) and not (key in Input._pressed_keys_this_frame):
-                    Input.on_input_event.invoke(InputEvent(action, InputEvent.EVENT_TYPE_RELEASED))
+                    Input.on_input_event.invoke(InputEvent(action, InputEventType.EVENT_TYPE_RELEASED))
 
         # Update axis values
         axis_mappings = Input.get_axis_mappings()
@@ -244,7 +249,7 @@ class Input:
                 axis_value = engine.utils.clamp(axis_value - axis_acceleration * delta_time, -1.0, 1.0)
 
             Input._axis_values[axis] = axis_value
-            Input.on_input_event.invoke(InputEvent(axis, InputEvent.EVENT_TYPE_AXIS, axis_value))
+            Input.on_input_event.invoke(InputEvent(axis, InputEventType.EVENT_TYPE_AXIS, axis_value))
 
     @staticmethod
     def _cache_pressed_keys_from_last_frame():

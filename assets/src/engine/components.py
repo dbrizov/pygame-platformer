@@ -1,8 +1,14 @@
+import pygame
 from engine.vector import Vector2
 from engine.input import Input
 from engine.input import InputEvent
+from engine.input import InputEventType
 
-from typing import Dict
+from typing import Callable
+
+
+ActionDelegate = Callable[[], None]
+AxisDelegate = Callable[[float], None]
 
 
 class ComponentPriority:
@@ -19,8 +25,8 @@ class Component(object):
         """
         self._priority = ComponentPriority.DEFAULT_COMPONENT
 
-    def init(self, entity):
-        self._entity = entity
+    def init(self):
+        pass
 
     def enter_play(self):
         pass
@@ -30,9 +36,6 @@ class Component(object):
 
     def tick(self, delta_time: float):
         pass
-
-    def get_entity(self):
-        return self._entity
 
 
 class TransformComponent(Component):
@@ -46,9 +49,9 @@ class InputComponent(Component):
     def __init__(self):
         super().__init__()
         self._priority = ComponentPriority.INPUT_COMPONENT
-        self._bound_functions_by_axis: Dict[str, list] = dict()
-        self._bound_functions_by_pressed_action: Dict[str, list] = dict()
-        self._bound_functions_by_released_action: Dict[str, list] = dict()
+        self._bound_functions_by_axis: dict[str, list[AxisDelegate]] = dict()
+        self._bound_functions_by_pressed_action: dict[str, list[ActionDelegate]] = dict()
+        self._bound_functions_by_released_action: dict[str, list[ActionDelegate]] = dict()
 
     def enter_play(self):
         super().enter_play()
@@ -58,28 +61,28 @@ class InputComponent(Component):
         super().exit_play()
         Input.on_input_event -= self._on_input_event
 
-    def bind_axis(self, axis_name, function):
+    def bind_axis(self, axis_name: str, function: AxisDelegate):
         if axis_name not in self._bound_functions_by_axis:
             self._bound_functions_by_axis[axis_name] = list()
         self._bound_functions_by_axis[axis_name].append(function)
 
-    def unbind_axis(self, axis_name, function):
+    def unbind_axis(self, axis_name: str, function: AxisDelegate):
         self._bound_functions_by_axis[axis_name].remove(function)
 
-    def bind_action(self, action_name, event_type, function):
-        if event_type == InputEvent.EVENT_TYPE_PRESSED:
+    def bind_action(self, action_name: str, event_type: InputEventType, function: ActionDelegate):
+        if event_type == InputEventType.EVENT_TYPE_PRESSED:
             if action_name not in self._bound_functions_by_pressed_action:
                 self._bound_functions_by_pressed_action[action_name] = list()
             self._bound_functions_by_pressed_action[action_name].append(function)
-        elif event_type == InputEvent.EVENT_TYPE_RELEASED:
+        elif event_type == InputEventType.EVENT_TYPE_RELEASED:
             if action_name not in self._bound_functions_by_released_action:
                 self._bound_functions_by_released_action[action_name] = list()
             self._bound_functions_by_released_action[action_name].append(function)
 
-    def unbind_action(self, action_name, event_type, function):
-        if event_type == InputEvent.EVENT_TYPE_PRESSED:
+    def unbind_action(self, action_name: str, event_type: InputEventType, function: ActionDelegate):
+        if event_type == InputEventType.EVENT_TYPE_PRESSED:
             self._bound_functions_by_pressed_action[action_name].remove(function)
-        elif event_type == InputEvent.EVENT_TYPE_RELEASED:
+        elif event_type == InputEventType.EVENT_TYPE_RELEASED:
             self._bound_functions_by_released_action[action_name].remove(function)
 
     def clear_bindings(self):
@@ -88,15 +91,21 @@ class InputComponent(Component):
         self._bound_functions_by_released_action.clear()
 
     def _on_input_event(self, input_event: InputEvent):
-        if input_event.type == InputEvent.EVENT_TYPE_AXIS:
+        if input_event.type == InputEventType.EVENT_TYPE_AXIS:
             if input_event.name in self._bound_functions_by_axis:
                 for func in self._bound_functions_by_axis[input_event.name]:
                     func(input_event.axis_value)
-        elif input_event.type == InputEvent.EVENT_TYPE_PRESSED:
+        elif input_event.type == InputEventType.EVENT_TYPE_PRESSED:
             if input_event.name in self._bound_functions_by_pressed_action:
                 for func in self._bound_functions_by_pressed_action[input_event.name]:
                     func()
-        elif input_event.type == InputEvent.EVENT_TYPE_RELEASED:
+        elif input_event.type == InputEventType.EVENT_TYPE_RELEASED:
             if input_event.name in self._bound_functions_by_released_action:
                 for func in self._bound_functions_by_released_action[input_event.name]:
                     func()
+
+
+class ImageComponent(Component):
+    def __init__(self, path_to_img: str):
+        super().__init__()
+        pygame.image.load(path_to_img)

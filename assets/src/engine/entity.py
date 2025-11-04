@@ -1,10 +1,20 @@
+from engine.components import Component
 from engine.components import TransformComponent
 from sortedcontainers import SortedList
 from sortedcontainers import SortedSet
 
+from typing import Type
+from typing import TypeVar
+from typing import Any
+from typing import Iterable
+
+
+TEntity = TypeVar("TEntity", bound="Entity")
+TComponent = TypeVar("TComponent", bound="Component")
+
 
 class Entity:
-    def __init__(self, priority=0, initial_components=None):
+    def __init__(self, priority: int = 0, initial_components: Iterable[Component] | None = None):
         """Represents an entity (game object) in the game
 
         `priority` -> the `priority` indicated in which order the entities will be updated.
@@ -23,7 +33,7 @@ class Entity:
 
     def init(self):
         for comp in self._components:
-            comp.init(self)
+            comp.init()
 
     def enter_play(self):
         self._is_in_play = True
@@ -40,27 +50,27 @@ class Entity:
             for comp in self._components:
                 comp.tick(delta_time)
 
-    def is_in_play(self):
+    def is_in_play(self) -> bool:
         return self._is_in_play
 
-    def get_transform(self):
+    def get_transform(self) -> TransformComponent:
         return self._transform
 
-    def add_component(self, component):
+    def add_component(self, component: TComponent) -> TComponent:
         self._components.add(component)
-        component.init(self)
+        component.init()
         if self.is_in_play():
             component.enter_play()
         return component
 
-    def remove_component(self, component):
+    def remove_component(self, component: Component):
         self._components.remove(component)
         if self.is_in_play():
-            component.exitPlay()
+            component.exit_play()
 
-    def get_component(self, class_obj):
+    def get_component(self, component_class: Type[TComponent]):
         for comp in self._components:
-            if isinstance(comp, class_obj):
+            if isinstance(comp, component_class):
                 return comp
         return None
 
@@ -71,14 +81,14 @@ class EntitySpawner:
     _entity_destroy_requests = SortedList(key=(lambda entity: entity._priority))
 
     @staticmethod
-    def get_entities():
+    def get_entities() -> Iterable[Entity]:
         """Get all active entities"""
         return EntitySpawner._entities
 
     @staticmethod
-    def spawn_entity(entity_class, *args, priority=0, initial_components=None) -> Entity:
+    def spawn_entity(entity_class: Type[TEntity], priority: int = 0, initial_components: Iterable[Component] | None = None, *args: Any) -> Entity:
         """`entity.init()` is called immediatelly. `entity.enter_play()` will be called on the next frame"""
-        entity = entity_class(*args, priority, initial_components)
+        entity = entity_class(priority, initial_components, *args)
         entity.init()
         EntitySpawner._entity_spawn_requests.add(entity)
         return entity

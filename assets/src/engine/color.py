@@ -1,4 +1,4 @@
-class Color(tuple):
+class Color(tuple[int, int, int, int]):
     NONE: "Color"
     BLACK: "Color"
     WHITE: "Color"
@@ -11,7 +11,7 @@ class Color(tuple):
     CYAN: "Color"
     ORANGE: "Color"
 
-    def __new__(cls, r, g, b, a=255):
+    def __new__(cls, r: int, g: int, b: int, a: int = 255) -> "Color":
         return tuple.__new__(cls, (r, g, b, a))
 
     @property
@@ -30,16 +30,16 @@ class Color(tuple):
     def a(self):
         return self[3]
 
-    def __add__(self, color):
+    def __add__(self, color: "Color") -> "Color":
         return Color(self.r + color.r, self.g + color.g, self.b + color.b, self.a + color.a)
 
-    def __sub__(self, color):
+    def __sub__(self, color: "Color") -> "Color":
         return Color(self.r - color.r, self.g - color.g, self.b - color.b, self.a - color.a)
 
-    def __mul__(self, scalar):
+    def __mul__(self, scalar: float) -> "Color":
         return Color(int(self.r * scalar), int(self.g * scalar), int(self.b * scalar), int(self.a * scalar))
 
-    def __truediv__(self, scalar):
+    def __truediv__(self, scalar: float) -> "Color":
         return Color(int(self.r / scalar), int(self.g / scalar), int(self.b / scalar), int(self.a / scalar))
 
     def __str__(self):

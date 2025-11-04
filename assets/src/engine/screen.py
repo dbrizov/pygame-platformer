@@ -1,13 +1,12 @@
-import pygame.display
-from pygame import Surface
+import pygame
 from engine.vector import Vector2
 
 
 class Screen:
-    _surface: Surface
+    _surface: pygame.Surface
 
     @staticmethod
-    def init(width: int, height: int, flags=0, depth=0):
+    def init(width: int, height: int, flags: int = 0, depth: int = 0):
         Screen._surface = pygame.display.set_mode((width, height), flags, depth)
 
     @staticmethod
@@ -15,19 +14,19 @@ class Screen:
         pygame.display.flip()
 
     @staticmethod
-    def get_surface():
+    def get_surface() -> pygame.Surface:
         return Screen._surface
 
     @staticmethod
-    def get_size():
+    def get_size() -> Vector2:
         return Vector2(Screen._surface.get_width(), Screen._surface.get_height())
 
     @staticmethod
-    def get_width():
+    def get_width() -> int:
         return Screen._surface.get_width()
 
     @staticmethod
-    def get_height():
+    def get_height() -> int:
         return Screen._surface.get_height()
 
     @staticmethod

@@ -13,7 +13,7 @@ class Time:
         Time._play_time += milliseconds / 1000.0
 
     @staticmethod
-    def get_fps():
+    def get_fps() -> float:
         return Time._clock.get_fps()
 
     @staticmethod
@@ -21,16 +21,16 @@ class Time:
         Time._fps = fps
 
     @staticmethod
-    def get_delta_time():
+    def get_delta_time() -> float:
         milliseconds = Time._clock.get_time()
         return milliseconds / 1000.0
 
     @staticmethod
-    def get_play_time():
+    def get_play_time() -> float:
         return Time._play_time
 
     @staticmethod
-    def get_time_scale():
+    def get_time_scale() -> float:
         return Time._time_scale
 
     @staticmethod
