@@ -14,26 +14,18 @@ TComponent = TypeVar("TComponent", bound="Component")
 
 
 class Entity:
-    def __init__(self, priority: int = 0, initial_components: Iterable[Component] | None = None):
-        """Represents an entity (game object) in the game
+    def __init__(self, priority: int = 0):
+        """Represents an `Entity` in the game.
 
         `priority` -> the `priority` indicated in which order the entities will be updated.
         If entity `A` has `priority=0`, and entity `B` has `priority=1`, `A` will be updated before `B`.
-        **It cannot be changed at runtime**
-
-        `initial_components` -> the initial components list
+        **NOTE: It cannot be changed at runtime**
         """
-        self.is_ticking = True
+        self._is_ticking = False
         self._is_in_play = False
         self._priority = priority
         self._transform = TransformComponent()
         self._components = SortedList(iterable=[self._transform], key=(lambda comp: comp._priority))
-        if initial_components is not None:
-            self._components.update(initial_components)
-
-    def init(self):
-        for comp in self._components:
-            comp.init()
 
     def enter_play(self):
         self._is_in_play = True
@@ -46,9 +38,11 @@ class Entity:
             comp.exit_play()
 
     def tick(self, delta_time: float):
-        if self.is_ticking:
-            for comp in self._components:
-                comp.tick(delta_time)
+        for comp in self._components:
+            comp.tick(delta_time)
+
+    def is_ticking(self) -> bool:
+        return self._is_ticking
 
     def is_in_play(self) -> bool:
         return self._is_in_play
@@ -58,13 +52,14 @@ class Entity:
 
     def add_component(self, component: TComponent) -> TComponent:
         self._components.add(component)
-        component.init()
+        component.set_entity(self)
         if self.is_in_play():
             component.enter_play()
         return component
 
     def remove_component(self, component: Component):
         self._components.remove(component)
+        component.set_entity(None)
         if self.is_in_play():
             component.exit_play()
 
@@ -86,10 +81,9 @@ class EntitySpawner:
         return EntitySpawner._entities
 
     @staticmethod
-    def spawn_entity(entity_class: Type[TEntity], priority: int = 0, initial_components: Iterable[Component] | None = None, *args: Any) -> Entity:
-        """`entity.init()` is called immediatelly. `entity.enter_play()` will be called on the next frame"""
-        entity = entity_class(priority, initial_components, *args)
-        entity.init()
+    def spawn_entity(entity_class: Type[TEntity], priority: int = 0, *args: Any) -> Entity:
+        """`entity.enter_play()` will be called on the next frame"""
+        entity = entity_class(priority, *args)
         EntitySpawner._entity_spawn_requests.add(entity)
         return entity
 

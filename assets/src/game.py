@@ -4,6 +4,7 @@ from engine.time import Time
 from engine.input import Input
 from engine.entity import EntitySpawner
 from ninjagame.player import PlayerEntity
+from ninjagame.background import BackgroundEntity
 
 
 SCREEN_WIDTH = 640  # in pixels
@@ -20,6 +21,7 @@ class Game:
 
         Time.set_fps(FPS)
 
+        EntitySpawner.spawn_entity(BackgroundEntity)
         EntitySpawner.spawn_entity(PlayerEntity)
 
     def run(self):
@@ -40,7 +42,8 @@ class Game:
             Input._tick(delta_time)
 
             for entity in EntitySpawner.get_entities():
-                entity.tick(delta_time * time_scale)
+                if entity.is_ticking() and entity.is_in_play():
+                    entity.tick(delta_time * time_scale)
 
             Screen.repaint()
 

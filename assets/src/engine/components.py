@@ -1,10 +1,16 @@
 import pygame
+from pathlib import Path
 from engine.vector import Vector2
+from engine.color import Color
 from engine.input import Input
 from engine.input import InputEvent
 from engine.input import InputEventType
+from engine.screen import Screen
 
 from typing import Callable
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from engine.entity import Entity
 
 
 ActionDelegate = Callable[[], None]
@@ -19,14 +25,14 @@ class ComponentPriority:
 
 
 class Component(object):
-    def __init__(self):
-        """The components in the `entity_component_list` of an `entity` are sorted by their `priority`.
-        **The `priority` cannot be changed at runtime**
-        """
-        self._priority = ComponentPriority.DEFAULT_COMPONENT
+    def __init__(self, priority: int = ComponentPriority.DEFAULT_COMPONENT):
+        """The base component class for all components.
 
-    def init(self):
-        pass
+        Params:
+            priority (int): The components attached to an `entity` are sorted by their `priority`. **NOTE: It cannot be changed at runtime**
+        """
+        self._priority = priority
+        self._entity: "Entity | None" = None
 
     def enter_play(self):
         pass
@@ -37,18 +43,24 @@ class Component(object):
     def tick(self, delta_time: float):
         pass
 
+    def set_entity(self, entity: "Entity | None"):
+        self._entity = entity
+
+    def get_entity(self) -> "Entity | None":
+        return self._entity
+
 
 class TransformComponent(Component):
-    def __init__(self):
-        super().__init__()
-        self._priority = ComponentPriority.TRANSFORM_COMPONENT
+    def __init__(self, priority: int = ComponentPriority.TRANSFORM_COMPONENT):
+        """A `Transform Component` stores an `Entity`'s position. An `Entity` always has a `Transform Component`."""
+        super().__init__(priority)
         self.position = Vector2.ZERO
 
 
 class InputComponent(Component):
-    def __init__(self):
-        super().__init__()
-        self._priority = ComponentPriority.INPUT_COMPONENT
+    def __init__(self, priority: int = ComponentPriority.INPUT_COMPONENT):
+        """An `Input Component` enables an `Entity` to bind various forms of input events to delegate functions."""
+        super().__init__(priority)
         self._bound_functions_by_axis: dict[str, list[AxisDelegate]] = dict()
         self._bound_functions_by_pressed_action: dict[str, list[ActionDelegate]] = dict()
         self._bound_functions_by_released_action: dict[str, list[ActionDelegate]] = dict()
@@ -106,6 +118,20 @@ class InputComponent(Component):
 
 
 class ImageComponent(Component):
-    def __init__(self, path_to_img: str):
-        super().__init__()
-        pygame.image.load(path_to_img)
+    def __init__(self, img_path: str | Path, color_key: Color = Color.BLACK, priority: int = ComponentPriority.RENDER_COMPONENT):
+        """An `Image Component` renders an image on the screen.
+
+        Params:
+            img_path (str): The path to the image asset so it can be loaded
+            color_key (Color): Transparent color key. All pixels matching this key will be transparent
+        """
+        super().__init__(priority)
+        self._image = pygame.image.load(img_path)
+        self._image.set_colorkey(color_key)
+
+    def tick(self, delta_time: float):
+        super().tick(delta_time)
+        entity = self.get_entity()
+        if entity is not None:
+            transform = entity.get_transform()
+            Screen.get_surface().blit(self._image, transform.position)
