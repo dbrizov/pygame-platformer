@@ -11,7 +11,7 @@ class PlayerEntity(Entity):
     def __init__(self, priority: int = 0):
         super().__init__(priority)
         self._is_ticking = True
-        self._speed = 100
+        self._speed = 200
 
         self._input_component = self.add_component(InputComponent())
         self._input_component.bind_axis("horizontal", lambda axis_value: self.move_horizontal(axis_value))

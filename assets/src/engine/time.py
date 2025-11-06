@@ -37,5 +37,4 @@ class Time:
     def set_time_scale(time_scale: float):
         if time_scale < 0.0:
             time_scale = 0.0
-
         Time._time_scale = time_scale
