@@ -1,6 +1,6 @@
 import pygame
 from pathlib import Path
-from engine.vector import Vector2
+from engine.math import Vector2
 from engine.color import Color
 from engine.input import Input
 from engine.input import InputEvent

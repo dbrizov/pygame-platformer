@@ -1,8 +1,8 @@
-from pygame import time
+import pygame
 
 
 class Time:
-    _clock = time.Clock()
+    _clock = pygame.time.Clock()
     _fps = 60
     _play_time = 0.0
     _time_scale = 1.0

@@ -1,5 +1,5 @@
 import pygame
-from engine.vector import Vector2
+from engine.math import Vector2
 
 
 class Screen:

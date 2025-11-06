@@ -3,7 +3,7 @@ from engine.entity import Entity
 from engine.components import InputComponent
 from engine.components import ImageComponent
 from engine.time import Time
-from engine.vector import Vector2
+from engine.math import Vector2
 from ninjagame.data import Data
 
 
@@ -14,11 +14,18 @@ class PlayerEntity(Entity):
         self._speed = 200
 
         self._input_component = self.add_component(InputComponent())
-        self._input_component.bind_axis("horizontal", lambda axis_value: self.move_horizontal(axis_value))
-        self._input_component.bind_axis("vertical", lambda axis_value: self.move_vertical(axis_value))
-
         self._image_component = self.add_component(
             ImageComponent(Data.asset_path("data", "images", "clouds", "cloud_1.png")))
+
+    def enter_play(self):
+        super().enter_play()
+        self._input_component.bind_axis("horizontal", self.move_horizontal)
+        self._input_component.bind_axis("vertical", self.move_vertical)
+
+    def exit_play(self):
+        super().exit_play()
+        self._input_component.unbind_axis("horizontal", self.move_horizontal)
+        self._input_component.unbind_axis("vertical", self.move_vertical)
 
     def move_horizontal(self, axis_value: float):
         transform = self.get_transform()
