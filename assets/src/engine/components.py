@@ -51,11 +51,11 @@ class TransformComponent(Component):
     def __init__(self, priority: int = ComponentPriority.TRANSFORM_COMPONENT):
         """A `Transform Component` stores an `Entity`'s position. An `Entity` always has a `Transform Component`."""
         super().__init__(priority)
-        self.position = Vec2.ZERO
+        self.position = Vec2.zero()
 
 
 class ImageComponent(Component):
-    def __init__(self, img_path: str | pathlib.Path, color_key: Color = Color.BLACK, priority: int = ComponentPriority.RENDER_COMPONENT):
+    def __init__(self, img_path: str | pathlib.Path, color_key: Color = Color.black(), priority: int = ComponentPriority.RENDER_COMPONENT):
         """An `Image Component` renders an image on the screen.
 
         Params:

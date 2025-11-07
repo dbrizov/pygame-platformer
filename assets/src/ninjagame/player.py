@@ -27,8 +27,8 @@ class PlayerEntity(Entity):
 
     def move_horizontal(self, axis_value: float):
         transform = self.get_transform()
-        transform.position = transform.position + Vec2.RIGHT * self._speed * axis_value * Time.get_delta_time()
+        transform.position = transform.position + Vec2.right() * self._speed * axis_value * Time.get_delta_time()
 
     def move_vertical(self, axis_value: float):
         transform = self.get_transform()
-        transform.position = transform.position + Vec2.UP * self._speed * axis_value * Time.get_delta_time()
+        transform.position = transform.position + Vec2.up() * self._speed * axis_value * Time.get_delta_time()
