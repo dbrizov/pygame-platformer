@@ -1,7 +1,7 @@
-import pygame
-import json
 import os
-from enum import Enum
+import json
+import enum
+import pygame
 from engine.math import Math
 from engine.events import EventHook
 
@@ -163,7 +163,7 @@ def _create_axis_values() -> dict[str, float]:
     return axis_values
 
 
-class InputEventType(Enum):
+class InputEventType(enum.Enum):
     EVENT_TYPE_PRESSED = 0
     EVENT_TYPE_RELEASED = 1
     EVENT_TYPE_AXIS = 2

@@ -1,5 +1,5 @@
 import pygame
-from engine.math import Vector2
+from engine.math import Vec2
 
 
 class Screen:
@@ -18,8 +18,8 @@ class Screen:
         return Screen._surface
 
     @staticmethod
-    def get_size() -> Vector2:
-        return Vector2(Screen._surface.get_width(), Screen._surface.get_height())
+    def get_size() -> Vec2:
+        return Vec2(Screen._surface.get_width(), Screen._surface.get_height())
 
     @staticmethod
     def get_width() -> int:

@@ -1,5 +1,4 @@
-from typing import Callable
-from typing import Any
+from typing import Any, Callable
 
 
 EventDelegate = Callable[[Any], None]

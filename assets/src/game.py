@@ -1,7 +1,7 @@
 import pygame
-from engine.screen import Screen
 from engine.time import Time
 from engine.input import Input
+from engine.screen import Screen
 from engine.entity import EntitySpawner
 from ninjagame.player import PlayerEntity
 from ninjagame.background import BackgroundEntity

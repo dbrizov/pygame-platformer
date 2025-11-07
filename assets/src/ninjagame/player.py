@@ -1,9 +1,7 @@
 from engine.entity import Entity
-# from engine.input import InputEventType
-from engine.components import InputComponent
-from engine.components import ImageComponent
+from engine.components import InputComponent, ImageComponent
 from engine.time import Time
-from engine.math import Vector2
+from engine.math import Vec2
 from ninjagame.data import Data
 
 
@@ -29,10 +27,8 @@ class PlayerEntity(Entity):
 
     def move_horizontal(self, axis_value: float):
         transform = self.get_transform()
-        new_position = transform.position + Vector2(self._speed * axis_value * Time.get_delta_time(), 0)
-        transform.position = new_position
+        transform.position = transform.position + Vec2.RIGHT * self._speed * axis_value * Time.get_delta_time()
 
     def move_vertical(self, axis_value: float):
         transform = self.get_transform()
-        new_position = transform.position - Vector2(0, self._speed * axis_value * Time.get_delta_time())
-        transform.position = new_position
+        transform.position = transform.position + Vec2.UP * self._speed * axis_value * Time.get_delta_time()

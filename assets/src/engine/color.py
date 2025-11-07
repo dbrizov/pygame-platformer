@@ -43,7 +43,10 @@ class Color(tuple[int, int, int, int]):
         return Color(int(self.r / scalar), int(self.g / scalar), int(self.b / scalar), int(self.a / scalar))
 
     def __str__(self):
-        return "({0}, {1}, {2}, {3})".format(self.r, self.b, self.b, self.a)
+        return f"({self.r}, {self.g}, {self.b}, {self.a})"
+
+    def __repr__(self):
+        return f"Color({self.r}, {self.g}, {self.b}, {self.a})"
 
 
 Color.NONE = Color(0, 0, 0, 0)

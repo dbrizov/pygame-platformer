@@ -1,12 +1,7 @@
-from engine.components import Component
-from engine.components import TransformComponent
-from sortedcontainers import SortedList
-from sortedcontainers import SortedSet
+from sortedcontainers import SortedList, SortedSet
+from engine.components import Component, TransformComponent
 
-from typing import Type
-from typing import TypeVar
-from typing import Any
-from typing import Iterable
+from typing import Any, Type, TypeVar, Iterable
 
 
 TEntity = TypeVar("TEntity", bound="Entity")

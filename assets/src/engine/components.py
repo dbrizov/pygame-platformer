@@ -1,14 +1,11 @@
+import pathlib
 import pygame
-from pathlib import Path
-from engine.math import Vector2
+from engine.math import Vec2
 from engine.color import Color
-from engine.input import Input
-from engine.input import InputEvent
-from engine.input import InputEventType
+from engine.input import Input, InputEvent, InputEventType
 from engine.screen import Screen
 
-from typing import Callable
-from typing import TYPE_CHECKING
+from typing import Callable, TYPE_CHECKING
 if TYPE_CHECKING:
     from engine.entity import Entity
 
@@ -54,11 +51,11 @@ class TransformComponent(Component):
     def __init__(self, priority: int = ComponentPriority.TRANSFORM_COMPONENT):
         """A `Transform Component` stores an `Entity`'s position. An `Entity` always has a `Transform Component`."""
         super().__init__(priority)
-        self.position = Vector2.ZERO
+        self.position = Vec2.ZERO
 
 
 class ImageComponent(Component):
-    def __init__(self, img_path: str | Path, color_key: Color = Color.BLACK, priority: int = ComponentPriority.RENDER_COMPONENT):
+    def __init__(self, img_path: str | pathlib.Path, color_key: Color = Color.BLACK, priority: int = ComponentPriority.RENDER_COMPONENT):
         """An `Image Component` renders an image on the screen.
 
         Params:
