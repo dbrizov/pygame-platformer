@@ -5,18 +5,21 @@ from typing import Iterable
 
 
 class Physics:
-    _accumulator: float = 0.0  # Used to accumulate how many physics ticks should happen on each frame
-    fixed_delta_time: float = 0.0
-    gravity: Vec2 = Vec2.zero()
+    _accumulator = 0.0  # Used to accumulate how many physics ticks should happen each frame
+    fixed_delta_time = 0.0
+    gravity = Vec2.zero()
+    interpolation = True
 
     @staticmethod
-    def init(fixed_delta_time: float, gravity: Vec2):
+    def init(fixed_delta_time: float, gravity: Vec2, interpolation: bool):
         Physics.fixed_delta_time = fixed_delta_time
         Physics.gravity = gravity
+        Physics.interpolation = interpolation
 
     @staticmethod
     def _tick(entities: Iterable[Entity], frame_delta_time: float):
         Physics._accumulator += frame_delta_time
+        physics_ticked_this_frame = Physics._accumulator >= Physics.fixed_delta_time
 
         while Physics._accumulator >= Physics.fixed_delta_time:
             for entity in entities:
@@ -24,6 +27,12 @@ class Physics:
                     entity._physics_tick(Physics.fixed_delta_time)
 
             Physics._accumulator -= Physics.fixed_delta_time
+
+        interpolation_fraction = 1.0
+        if Physics.interpolation and not physics_ticked_this_frame:
+            interpolation_fraction = Physics._accumulator / Physics.fixed_delta_time
+
+        return interpolation_fraction
 
     @staticmethod
     def get_fixed_delta_time() -> float:

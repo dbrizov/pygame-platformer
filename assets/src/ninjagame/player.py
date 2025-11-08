@@ -8,7 +8,7 @@ class PlayerEntity(Entity):
     def __init__(self, priority: int = 0):
         super().__init__(priority)
         self._is_ticking = True
-        self._speed = 600.0
+        self._speed = 300.0
         self._horizontal_input = 0.0
         self._vertical_input = 0.0
 
@@ -28,10 +28,11 @@ class PlayerEntity(Entity):
 
     def _physics_tick(self, delta_time: float):
         super()._physics_tick(delta_time)
-        horizontal_movement = Vec2.right() * self._speed * self._horizontal_input * delta_time
-        vertical_movement = Vec2.up() * self._speed * self._vertical_input * delta_time
-        movement = horizontal_movement + vertical_movement
-        self.get_transform().position += movement
+        horizontal_delta = Vec2.right() * self._speed * self._horizontal_input * delta_time
+        vertical_delta = Vec2.up() * self._speed * self._vertical_input * delta_time
+        position_delta = horizontal_delta + vertical_delta
+        transform = self.get_transform()
+        transform.set_position(transform.get_position() + position_delta)
 
     def _set_horizontal_input(self, axis_value: float):
         self._horizontal_input = axis_value

@@ -3,7 +3,7 @@ import pygame
 from engine.math import Vec2
 from engine.color import Color
 from engine.input import Input, InputEvent, InputEventType
-from engine.screen import Screen
+from engine.screen import Screen, RenderStruct
 
 from typing import Callable, TYPE_CHECKING
 if TYPE_CHECKING:
@@ -49,12 +49,28 @@ class Component(object):
     def get_entity(self) -> "Entity | None":
         return self._entity
 
+    def get_entity_transform(self) -> "TransformComponent":
+        entity = self.get_entity()
+        assert entity is not None
+        return entity.get_transform()
+
 
 class TransformComponent(Component):
     def __init__(self, priority: int = ComponentPriority.TRANSFORM_COMPONENT):
         """A `Transform Component` stores an `Entity`'s position. An `Entity` always has a `Transform Component`."""
         super().__init__(priority)
-        self.position = Vec2.zero()
+        self._position = Vec2.zero()
+        self._prev_position = Vec2.zero()
+
+    def get_prev_position(self) -> Vec2:
+        return self._prev_position
+
+    def get_position(self) -> Vec2:
+        return self._position
+
+    def set_position(self, position: Vec2):
+        self._prev_position = self._position
+        self._position = position
 
 
 class RigidBodyComponent(Component):
@@ -77,10 +93,9 @@ class ImageComponent(Component):
 
     def _tick(self, delta_time: float):
         super()._tick(delta_time)
-        entity = self.get_entity()
-        if entity is not None:
-            transform = entity.get_transform()
-            Screen.get_surface().blit(self._image, transform.position)
+        transform = self.get_entity_transform()
+        render_struct = RenderStruct(self._image, transform.get_position(), transform.get_prev_position())
+        Screen.deferred_blit(render_struct)
 
 
 class InputComponent(Component):

@@ -14,18 +14,19 @@ SCREEN_HEIGHT = 480  # In pixels
 FPS = 60
 PHYSICS_DELTA_TIME = 1.0 / 60.0
 PHYSICS_GRAVITY = Vec2.down() * 500
+PHYSICS_INTERPOLATION = True
 
 
 class Game:
     def __init__(self):
         pygame.init()
 
-        Screen.init(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+        Screen.init(SCREEN_WIDTH, SCREEN_HEIGHT)
         Screen.set_window_title("Ninja Game")
 
         Time.set_fps(FPS)
 
-        Physics.init(PHYSICS_DELTA_TIME, PHYSICS_GRAVITY)
+        Physics.init(PHYSICS_DELTA_TIME, PHYSICS_GRAVITY, PHYSICS_INTERPOLATION)
 
         EntitySpawner.spawn_entity(BackgroundEntity)
         EntitySpawner.spawn_entity(PlayerEntity)
@@ -53,9 +54,10 @@ class Game:
                     entity._tick(delta_time)
 
             # Physics tick
-            Physics._tick(entities, delta_time)
+            interpolation_fraction = Physics._tick(entities, delta_time)
 
-            Screen.repaint()
+            # Render
+            Screen.render_frame(interpolation_fraction)
 
         pygame.quit()
 
