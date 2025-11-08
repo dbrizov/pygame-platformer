@@ -8,6 +8,6 @@ class BackgroundEntity(Entity):
         super().__init__(priority)
         self._is_ticking = True
 
-    def tick(self, delta_time: float):
-        super().tick(delta_time)
+    def _tick(self, delta_time: float):
+        super()._tick(delta_time)
         Screen.get_surface().fill(Color(14, 219, 248))

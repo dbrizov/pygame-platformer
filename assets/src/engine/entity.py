@@ -22,19 +22,23 @@ class Entity:
         self._transform = TransformComponent()
         self._components = SortedList(iterable=[self._transform], key=(lambda comp: comp._priority))
 
-    def enter_play(self):
+    def _enter_play(self):
         self._is_in_play = True
         for comp in self._components:
-            comp.enter_play()
+            comp._enter_play()
 
-    def exit_play(self):
+    def _exit_play(self):
         self._is_in_play = False
         for comp in self._components:
-            comp.exit_play()
+            comp._exit_play()
 
-    def tick(self, delta_time: float):
+    def _tick(self, delta_time: float):
         for comp in self._components:
-            comp.tick(delta_time)
+            comp._tick(delta_time)
+
+    def _physics_tick(self, delta_time: float):
+        for comp in self._components:
+            comp._physics_tick(delta_time)
 
     def is_ticking(self) -> bool:
         return self._is_ticking
@@ -47,16 +51,16 @@ class Entity:
 
     def add_component(self, component: TComponent) -> TComponent:
         self._components.add(component)
-        component.set_entity(self)
+        component._set_entity(self)
         if self.is_in_play():
-            component.enter_play()
+            component._enter_play()
         return component
 
     def remove_component(self, component: Component):
         self._components.remove(component)
-        component.set_entity(None)
+        component._set_entity(None)
         if self.is_in_play():
-            component.exit_play()
+            component._exit_play()
 
     def get_component(self, component_class: Type[TComponent]):
         for comp in self._components:
@@ -91,7 +95,7 @@ class EntitySpawner:
     def _resolve_entity_spawn_requests():
         for entity in EntitySpawner._entity_spawn_requests:
             EntitySpawner._entities.add(entity)
-            entity.enter_play()
+            entity._enter_play()
 
         EntitySpawner._entity_spawn_requests.clear()
 
@@ -99,6 +103,6 @@ class EntitySpawner:
     def _resolve_entity_destroy_requests():
         for entity in EntitySpawner._entity_destroy_requests:
             EntitySpawner._entities.remove(entity)
-            entity.exit_play()
+            entity._exit_play()
 
         EntitySpawner._entity_destroy_requests.clear()

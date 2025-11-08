@@ -31,16 +31,19 @@ class Component(object):
         self._priority = priority
         self._entity: "Entity | None" = None
 
-    def enter_play(self):
+    def _enter_play(self):
         pass
 
-    def exit_play(self):
+    def _exit_play(self):
         pass
 
-    def tick(self, delta_time: float):
+    def _tick(self, delta_time: float):
         pass
 
-    def set_entity(self, entity: "Entity | None"):
+    def _physics_tick(self, delta_time: float):
+        pass
+
+    def _set_entity(self, entity: "Entity | None"):
         self._entity = entity
 
     def get_entity(self) -> "Entity | None":
@@ -52,6 +55,12 @@ class TransformComponent(Component):
         """A `Transform Component` stores an `Entity`'s position. An `Entity` always has a `Transform Component`."""
         super().__init__(priority)
         self.position = Vec2.zero()
+
+
+class RigidBodyComponent(Component):
+    def __init__(self, priority: int = ComponentPriority.DEFAULT_COMPONENT):
+        """A `RigidBody Component` controls an `Entity`'s position through physics simulation."""
+        super().__init__(priority)
 
 
 class ImageComponent(Component):
@@ -66,8 +75,8 @@ class ImageComponent(Component):
         self._image = pygame.image.load(img_path)
         self._image.set_colorkey(color_key)
 
-    def tick(self, delta_time: float):
-        super().tick(delta_time)
+    def _tick(self, delta_time: float):
+        super()._tick(delta_time)
         entity = self.get_entity()
         if entity is not None:
             transform = entity.get_transform()
@@ -82,13 +91,27 @@ class InputComponent(Component):
         self._bound_functions_by_pressed_action: dict[str, list[ActionDelegate]] = dict()
         self._bound_functions_by_released_action: dict[str, list[ActionDelegate]] = dict()
 
-    def enter_play(self):
-        super().enter_play()
+    def _enter_play(self):
+        super()._enter_play()
         Input.on_input_event += self._on_input_event
 
-    def exit_play(self):
-        super().exit_play()
+    def _exit_play(self):
+        super()._exit_play()
         Input.on_input_event -= self._on_input_event
+
+    def _on_input_event(self, input_event: InputEvent):
+        if input_event.type == InputEventType.EVENT_TYPE_AXIS:
+            if input_event.name in self._bound_functions_by_axis:
+                for func in self._bound_functions_by_axis[input_event.name]:
+                    func(input_event.axis_value)
+        elif input_event.type == InputEventType.EVENT_TYPE_PRESSED:
+            if input_event.name in self._bound_functions_by_pressed_action:
+                for func in self._bound_functions_by_pressed_action[input_event.name]:
+                    func()
+        elif input_event.type == InputEventType.EVENT_TYPE_RELEASED:
+            if input_event.name in self._bound_functions_by_released_action:
+                for func in self._bound_functions_by_released_action[input_event.name]:
+                    func()
 
     def bind_axis(self, axis_name: str, function: AxisDelegate):
         if axis_name not in self._bound_functions_by_axis:
@@ -118,17 +141,3 @@ class InputComponent(Component):
         self._bound_functions_by_axis.clear()
         self._bound_functions_by_pressed_action.clear()
         self._bound_functions_by_released_action.clear()
-
-    def _on_input_event(self, input_event: InputEvent):
-        if input_event.type == InputEventType.EVENT_TYPE_AXIS:
-            if input_event.name in self._bound_functions_by_axis:
-                for func in self._bound_functions_by_axis[input_event.name]:
-                    func(input_event.axis_value)
-        elif input_event.type == InputEventType.EVENT_TYPE_PRESSED:
-            if input_event.name in self._bound_functions_by_pressed_action:
-                for func in self._bound_functions_by_pressed_action[input_event.name]:
-                    func()
-        elif input_event.type == InputEventType.EVENT_TYPE_RELEASED:
-            if input_event.name in self._bound_functions_by_released_action:
-                for func in self._bound_functions_by_released_action[input_event.name]:
-                    func()

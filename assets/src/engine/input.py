@@ -155,9 +155,8 @@ def _get_input_settings() -> Any:
         return json.load(file_stream)
 
 
-def _create_axis_values() -> dict[str, float]:
+def _create_axis_values(axis_mappings: dict[str, Any]) -> dict[str, float]:
     axis_values: dict[str, float] = dict()
-    axis_mappings = _get_input_settings()[AXIS_MAPPINGS]
     for axis in axis_mappings:
         axis_values[axis] = 0.0
     return axis_values
@@ -183,25 +182,11 @@ class Input:
     on_input_event = EventHook()
 
     _input_settings = _get_input_settings()
-    _axis_values = _create_axis_values()
+    _action_mappings: dict[str, list[str]] = _input_settings[ACTION_MAPPINGS]
+    _axis_mappings: dict[str, Any] = _input_settings[AXIS_MAPPINGS]
+    _axis_values = _create_axis_values(_axis_mappings)
     _pressed_keys_this_frame: set[str] = set()
     _pressed_keys_last_frame: set[str] = set()
-
-    @staticmethod
-    def get_input_settings() -> Any:
-        return Input._input_settings
-
-    @staticmethod
-    def get_action_mappings() -> dict[str, list[str]]:
-        input_settings = Input.get_input_settings()
-        action_mappings = input_settings[ACTION_MAPPINGS]
-        return action_mappings
-
-    @staticmethod
-    def get_axis_mappings() -> dict[str, Any]:
-        input_settings = Input.get_input_settings()
-        axis_mappings = input_settings[AXIS_MAPPINGS]
-        return axis_mappings
 
     @staticmethod
     def _tick(delta_time: float):
@@ -209,7 +194,7 @@ class Input:
         Input._update_pressed_keys_this_frame()
 
         # Dispatch action events
-        action_mappings = Input.get_action_mappings()
+        action_mappings = Input._action_mappings
         for action, keys in action_mappings.items():
             for key in keys:
                 if (key in Input._pressed_keys_this_frame) and not (key in Input._pressed_keys_last_frame):
@@ -218,7 +203,7 @@ class Input:
                     Input.on_input_event.invoke(InputEvent(action, InputEventType.EVENT_TYPE_RELEASED))
 
         # Update axis values
-        axis_mappings = Input.get_axis_mappings()
+        axis_mappings = Input._axis_mappings
         for axis, axis_settings in axis_mappings.items():
             axis_acceleration = axis_settings["acceleration"]
             axis_deceleration = axis_settings["deceleration"]

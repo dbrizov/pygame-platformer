@@ -5,7 +5,6 @@ class Time:
     _clock = pygame.time.Clock()
     _fps = 60
     _play_time = 0.0
-    _time_scale = 1.0
 
     @staticmethod
     def _tick():
@@ -28,13 +27,3 @@ class Time:
     @staticmethod
     def get_play_time() -> float:
         return Time._play_time
-
-    @staticmethod
-    def get_time_scale() -> float:
-        return Time._time_scale
-
-    @staticmethod
-    def set_time_scale(time_scale: float):
-        if time_scale < 0.0:
-            time_scale = 0.0
-        Time._time_scale = time_scale
