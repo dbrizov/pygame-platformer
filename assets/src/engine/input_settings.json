@@ -28,8 +28,8 @@
     },
     "axis_mappings": {
         "horizontal": {
-            "acceleration": 3,
-            "deceleration": 3,
+            "acceleration": 10,
+            "deceleration": 10,
             "positive": [
                 "K_RIGHT",
                 "K_d"
@@ -40,8 +40,8 @@
             ]
         },
         "vertical": {
-            "acceleration": 3,
-            "deceleration": 3,
+            "acceleration": 10,
+            "deceleration": 10,
             "positive": [
                 "K_UP",
                 "K_w"
