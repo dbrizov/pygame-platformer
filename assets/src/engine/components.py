@@ -3,7 +3,7 @@ import pygame
 from engine.math import Vec2
 from engine.color import Color
 from engine.input import Input, InputEvent, InputEventType
-from engine.screen import Screen, RenderStruct
+from engine.graphics import Display, RenderStruct
 
 from typing import Callable, TYPE_CHECKING
 if TYPE_CHECKING:
@@ -98,7 +98,7 @@ class ImageComponent(Component):
         super()._render_tick(delta_time)
         transform = self.get_entity_transform()
         render_struct = RenderStruct(self._image, transform.get_position(), transform.get_prev_position())
-        Screen.deferred_blit(render_struct)
+        Display.deferred_blit(render_struct)
 
 
 class InputComponent(Component):

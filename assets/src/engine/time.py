@@ -2,9 +2,15 @@ import pygame
 
 
 class Time:
-    _clock = pygame.time.Clock()
-    _fps = 60
-    _play_time = 0.0
+    _clock: pygame.time.Clock
+    _play_time: float
+    _fps: int
+
+    @staticmethod
+    def init(fps: int):
+        Time._clock = pygame.time.Clock()
+        Time._play_time = 0.0
+        Time.set_fps(fps)
 
     @staticmethod
     def _tick():
