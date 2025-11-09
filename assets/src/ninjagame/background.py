@@ -11,8 +11,8 @@ class BackgroundEntity(Entity):
         self._surface = pygame.Surface(Screen.get_size())
         self._surface.fill(Color(14, 219, 248))
 
-    def _tick(self, delta_time: float):
-        super()._tick(delta_time)
+    def _render_tick(self, delta_time: float):
+        super()._render_tick(delta_time)
         transform = self.get_transform()
         render_struct = RenderStruct(self._surface, transform.get_position(), transform.get_prev_position())
         Screen.deferred_blit(render_struct)

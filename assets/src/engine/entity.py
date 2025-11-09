@@ -40,6 +40,10 @@ class Entity:
         for comp in self._components:
             comp._physics_tick(delta_time)
 
+    def _render_tick(self, delta_time: float):
+        for comp in self._components:
+            comp._render_tick(delta_time)
+
     def is_ticking(self) -> bool:
         return self._is_ticking
 

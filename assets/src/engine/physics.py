@@ -19,7 +19,6 @@ class Physics:
     @staticmethod
     def _tick(entities: Iterable[Entity], frame_delta_time: float):
         Physics._accumulator += frame_delta_time
-        physics_ticked_this_frame = Physics._accumulator >= Physics.fixed_delta_time
 
         while Physics._accumulator >= Physics.fixed_delta_time:
             for entity in entities:
@@ -28,10 +27,7 @@ class Physics:
 
             Physics._accumulator -= Physics.fixed_delta_time
 
-        interpolation_fraction = 1.0
-        if Physics.interpolation and not physics_ticked_this_frame:
-            interpolation_fraction = Physics._accumulator / Physics.fixed_delta_time
-
+        interpolation_fraction = (Physics._accumulator / Physics.fixed_delta_time) if Physics.interpolation else 1.0
         return interpolation_fraction
 
     @staticmethod

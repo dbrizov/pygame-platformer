@@ -43,6 +43,9 @@ class Component(object):
     def _physics_tick(self, delta_time: float):
         pass
 
+    def _render_tick(self, delta_time: float):
+        pass
+
     def _set_entity(self, entity: "Entity | None"):
         self._entity = entity
 
@@ -91,8 +94,8 @@ class ImageComponent(Component):
         self._image = pygame.image.load(img_path)
         self._image.set_colorkey(color_key)
 
-    def _tick(self, delta_time: float):
-        super()._tick(delta_time)
+    def _render_tick(self, delta_time: float):
+        super()._render_tick(delta_time)
         transform = self.get_entity_transform()
         render_struct = RenderStruct(self._image, transform.get_position(), transform.get_prev_position())
         Screen.deferred_blit(render_struct)

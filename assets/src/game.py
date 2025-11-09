@@ -43,7 +43,7 @@ class Game:
             EntitySpawner._resolve_entity_spawn_requests()
             EntitySpawner._resolve_entity_destroy_requests()
 
-            # Frame tick
+            # Engine._tick()
             delta_time = Time.get_delta_time()
 
             Input._tick(delta_time)
@@ -53,10 +53,14 @@ class Game:
                 if entity.is_ticking() and entity.is_in_play():
                     entity._tick(delta_time)
 
-            # Physics tick
+            # Engine._physics_tick()
             interpolation_fraction = Physics._tick(entities, delta_time)
 
-            # Render
+            # Engine._render_tick()
+            for entity in entities:
+                if entity.is_ticking() and entity.is_in_play():
+                    entity._render_tick(delta_time)
+
             Screen.render_frame(interpolation_fraction)
 
         pygame.quit()
