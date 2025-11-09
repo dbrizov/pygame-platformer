@@ -5,13 +5,14 @@ from typing import Iterable
 
 
 class Physics:
-    _accumulator = 0.0  # Used to accumulate how many physics ticks should happen each frame
-    fixed_delta_time = 0.0
-    gravity = Vec2.zero()
-    interpolation = True
+    _accumulator: float  # Used to accumulate how many physics ticks should happen each frame
+    fixed_delta_time: float
+    gravity: Vec2
+    interpolation: bool
 
     @staticmethod
     def init(fixed_delta_time: float, gravity: Vec2, interpolation: bool):
+        Physics._accumulator = 0.0
         Physics.fixed_delta_time = fixed_delta_time
         Physics.gravity = gravity
         Physics.interpolation = interpolation
