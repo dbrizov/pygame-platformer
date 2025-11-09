@@ -30,19 +30,3 @@ class Physics:
 
         interpolation_fraction = (Physics._accumulator / Physics.fixed_delta_time) if Physics.interpolation else 1.0
         return interpolation_fraction
-
-    @staticmethod
-    def get_fixed_delta_time() -> float:
-        return Physics._fixed_delta_time
-
-    @staticmethod
-    def set_fixed_delta_time(fixed_delta_time: float):
-        Physics._fixed_delta_time = fixed_delta_time
-
-    @staticmethod
-    def get_gravity() -> Vec2:
-        return Physics._gravity
-
-    @staticmethod
-    def set_gravity(gravity: Vec2):
-        Physics._gravity = gravity

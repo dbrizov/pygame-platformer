@@ -1,11 +1,14 @@
 from engine.gameloop import EngineSettings, GameLoop
+from engine.graphics import Display
 from engine.math import Vec2
 from engine.entity import EntitySpawner
 from ninjagame.player import PlayerEntity
 from ninjagame.background import BackgroundEntity
 
 
-def spawn_entities():
+def init_game():
+    Display.set_window_title("Ninja Game")
+
     EntitySpawner.spawn_entity(BackgroundEntity)
     EntitySpawner.spawn_entity(PlayerEntity)
 
@@ -21,7 +24,7 @@ def run():
 
     GameLoop.init(engine_settings)
 
-    spawn_entities()
+    init_game()
 
     GameLoop.run()
 
