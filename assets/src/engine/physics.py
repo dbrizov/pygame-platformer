@@ -18,7 +18,7 @@ class Physics:
         Physics.interpolation = interpolation
 
     @staticmethod
-    def _tick(entities: Iterable[Entity], frame_delta_time: float):
+    def _tick(entities: Iterable[Entity], frame_delta_time: float) -> float:
         Physics._accumulator += frame_delta_time
 
         while Physics._accumulator >= Physics.fixed_delta_time:
