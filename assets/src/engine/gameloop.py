@@ -1,29 +1,20 @@
 import pygame
-from engine.math import Vec2
 from engine.time import Time
 from engine.input import Input
 from engine.physics import Physics
 from engine.graphics import Display
+from engine.config import EngineConfig
 from engine.entity import EntitySpawner
-
-
-class EngineSettings:
-    def __init__(self):
-        self.screen_width: int
-        self.screen_height: int
-        self.fps: int
-        self.physics_delta_time: float
-        self.physics_gravity: Vec2
-        self.physics_interpolation = True
 
 
 class GameLoop:
     @staticmethod
-    def init(settings: EngineSettings):
+    def init():
         pygame.init()
-        Display.init(settings.screen_width, settings.screen_height)
-        Time.init(settings.fps)
-        Physics.init(settings.physics_delta_time, settings.physics_gravity, settings.physics_interpolation)
+        EngineConfig.init()
+        Display.init(EngineConfig.SCREEN_WIDTH, EngineConfig.SCREEN_HEIGHT)
+        Time.init(EngineConfig.TARGET_FPS)
+        Physics.init(EngineConfig.PHYSICS_DELTA_TIME, EngineConfig.PHYSICS_INTERPOLATION)
 
     @staticmethod
     def run():

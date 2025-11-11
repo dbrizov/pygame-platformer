@@ -16,7 +16,7 @@ class PlayerEntity(Entity):
 
         self._input_component = self.add_component(InputComponent())
         self._image_component = self.add_component(
-            ImageComponent(Data.asset_path("data", "images", "clouds", "cloud_1.png")))
+            ImageComponent(Data.asset_path("data", "images", "entities", "player", "idle", "00.png")))
 
     def _enter_play(self):
         super()._enter_play()
