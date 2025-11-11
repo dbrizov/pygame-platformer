@@ -118,15 +118,15 @@ class InputComponent(Component):
         Input.on_input_event -= self._on_input_event
 
     def _on_input_event(self, input_event: InputEvent):
-        if input_event.type == InputEventType.EVENT_TYPE_AXIS:
+        if input_event.type == InputEventType.AXIS:
             if input_event.name in self._bound_functions_by_axis:
                 for func in self._bound_functions_by_axis[input_event.name]:
                     func(input_event.axis_value)
-        elif input_event.type == InputEventType.EVENT_TYPE_PRESSED:
+        elif input_event.type == InputEventType.PRESSED:
             if input_event.name in self._bound_functions_by_pressed_action:
                 for func in self._bound_functions_by_pressed_action[input_event.name]:
                     func()
-        elif input_event.type == InputEventType.EVENT_TYPE_RELEASED:
+        elif input_event.type == InputEventType.RELEASED:
             if input_event.name in self._bound_functions_by_released_action:
                 for func in self._bound_functions_by_released_action[input_event.name]:
                     func()
@@ -140,19 +140,19 @@ class InputComponent(Component):
         self._bound_functions_by_axis[axis_name].remove(function)
 
     def bind_action(self, action_name: str, event_type: InputEventType, function: ActionDelegate):
-        if event_type == InputEventType.EVENT_TYPE_PRESSED:
+        if event_type == InputEventType.PRESSED:
             if action_name not in self._bound_functions_by_pressed_action:
                 self._bound_functions_by_pressed_action[action_name] = list()
             self._bound_functions_by_pressed_action[action_name].append(function)
-        elif event_type == InputEventType.EVENT_TYPE_RELEASED:
+        elif event_type == InputEventType.RELEASED:
             if action_name not in self._bound_functions_by_released_action:
                 self._bound_functions_by_released_action[action_name] = list()
             self._bound_functions_by_released_action[action_name].append(function)
 
     def unbind_action(self, action_name: str, event_type: InputEventType, function: ActionDelegate):
-        if event_type == InputEventType.EVENT_TYPE_PRESSED:
+        if event_type == InputEventType.PRESSED:
             self._bound_functions_by_pressed_action[action_name].remove(function)
-        elif event_type == InputEventType.EVENT_TYPE_RELEASED:
+        elif event_type == InputEventType.RELEASED:
             self._bound_functions_by_released_action[action_name].remove(function)
 
     def clear_bindings(self):

@@ -22,8 +22,8 @@
         "cancel": [
             "K_ESCAPE"
         ],
-        "pause": [
-            "K_SPACE"
+        "slow_motion": [
+            "K_TAB"
         ]
     },
     "axis_mappings": {

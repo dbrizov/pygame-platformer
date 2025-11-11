@@ -36,9 +36,9 @@ class Entity:
         for comp in self._components:
             comp._tick(delta_time)
 
-    def _physics_tick(self, delta_time: float):
+    def _physics_tick(self, fixed_delta_time: float):
         for comp in self._components:
-            comp._physics_tick(delta_time)
+            comp._physics_tick(fixed_delta_time)
 
     def _render_tick(self, delta_time: float):
         for comp in self._components:

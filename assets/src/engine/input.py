@@ -163,9 +163,9 @@ def _create_axis_values(axis_mappings: dict[str, Any]) -> dict[str, float]:
 
 
 class InputEventType(enum.Enum):
-    EVENT_TYPE_PRESSED = 0
-    EVENT_TYPE_RELEASED = 1
-    EVENT_TYPE_AXIS = 2
+    PRESSED = 0
+    RELEASED = 1
+    AXIS = 2
 
 
 class InputEvent:
@@ -198,9 +198,9 @@ class Input:
         for action, keys in action_mappings.items():
             for key in keys:
                 if (key in Input._pressed_keys_this_frame) and not (key in Input._pressed_keys_last_frame):
-                    Input.on_input_event.invoke(InputEvent(action, InputEventType.EVENT_TYPE_PRESSED))
+                    Input.on_input_event.invoke(InputEvent(action, InputEventType.PRESSED))
                 elif (key in Input._pressed_keys_last_frame) and not (key in Input._pressed_keys_this_frame):
-                    Input.on_input_event.invoke(InputEvent(action, InputEventType.EVENT_TYPE_RELEASED))
+                    Input.on_input_event.invoke(InputEvent(action, InputEventType.RELEASED))
 
         # Update axis values
         axis_mappings = Input._axis_mappings
@@ -234,7 +234,7 @@ class Input:
                 axis_value = Math.clamp(axis_value - axis_acceleration * delta_time, -1.0, 1.0)
 
             Input._axis_values[axis] = axis_value
-            Input.on_input_event.invoke(InputEvent(axis, InputEventType.EVENT_TYPE_AXIS, axis_value))
+            Input.on_input_event.invoke(InputEvent(axis, InputEventType.AXIS, axis_value))
 
     @staticmethod
     def _cache_pressed_keys_from_last_frame():

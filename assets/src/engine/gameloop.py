@@ -39,6 +39,7 @@ class GameLoop:
             EntitySpawner._resolve_entity_destroy_requests()
 
             delta_time = Time.get_delta_time()
+            scaled_delta_time = delta_time * Time.get_time_scale()
 
             # Engine._tick()
             Input._tick(delta_time)
@@ -46,15 +47,15 @@ class GameLoop:
             entities = EntitySpawner.get_entities()
             for entity in entities:
                 if entity.is_ticking() and entity.is_in_play():
-                    entity._tick(delta_time)
+                    entity._tick(scaled_delta_time)
 
             # Engine._physics_tick()
-            interpolation_fraction = Physics._tick(entities, delta_time)
+            interpolation_fraction = Physics._tick(entities, scaled_delta_time)
 
             # Engine._render_tick()
             for entity in entities:
                 if entity.is_ticking() and entity.is_in_play():
-                    entity._render_tick(delta_time)
+                    entity._render_tick(scaled_delta_time)
 
             Display.render_frame(interpolation_fraction)
 
