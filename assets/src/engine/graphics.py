@@ -2,6 +2,14 @@ import pygame
 from engine.math import Vec2
 
 
+class Graphics:
+    scale: float
+
+    @staticmethod
+    def init(graphics_scale: float):
+        Graphics.scale = graphics_scale
+
+
 class RenderStruct:
     def __init__(self, surface: pygame.Surface, position: Vec2, prev_position: Vec2):
         self.surface = surface

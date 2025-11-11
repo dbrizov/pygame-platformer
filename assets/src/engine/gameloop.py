@@ -2,7 +2,7 @@ import pygame
 from engine.time import Time
 from engine.input import Input
 from engine.physics import Physics
-from engine.graphics import Display
+from engine.graphics import Display, Graphics
 from engine.config import EngineConfig
 from engine.entity import EntitySpawner
 
@@ -12,8 +12,9 @@ class GameLoop:
     def init():
         pygame.init()
         EngineConfig.init()
-        Display.init(EngineConfig.SCREEN_WIDTH, EngineConfig.SCREEN_HEIGHT)
         Time.init(EngineConfig.TARGET_FPS)
+        Display.init(EngineConfig.SCREEN_WIDTH, EngineConfig.SCREEN_HEIGHT)
+        Graphics.init(EngineConfig.GRAPHICS_SCALE)
         Physics.init(EngineConfig.PHYSICS_DELTA_TIME, EngineConfig.PHYSICS_INTERPOLATION)
 
     @staticmethod

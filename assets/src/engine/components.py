@@ -1,7 +1,5 @@
-import pathlib
 import pygame
 from engine.math import Vec2
-from engine.color import Color
 from engine.input import Input, InputEvent, InputEventType
 from engine.graphics import Display, RenderStruct
 
@@ -83,7 +81,7 @@ class RigidBodyComponent(Component):
 
 
 class ImageComponent(Component):
-    def __init__(self, img_path: str | pathlib.Path, color_key: Color = Color.black(), priority: int = ComponentPriority.RENDER_COMPONENT):
+    def __init__(self, image: pygame.Surface | None = None, priority: int = ComponentPriority.RENDER_COMPONENT):
         """An `Image Component` renders an image on the screen.
 
         Params:
@@ -91,14 +89,14 @@ class ImageComponent(Component):
             color_key (Color): Transparent color key. All pixels matching this key will be transparent
         """
         super().__init__(priority)
-        self._image = pygame.image.load(img_path)
-        self._image.set_colorkey(color_key)
+        self.image = image
 
     def _render_tick(self, delta_time: float):
         super()._render_tick(delta_time)
-        transform = self.get_entity_transform()
-        render_struct = RenderStruct(self._image, transform.get_position(), transform.get_prev_position())
-        Display.deferred_blit(render_struct)
+        if self.image:
+            transform = self.get_entity_transform()
+            render_struct = RenderStruct(self.image, transform.get_position(), transform.get_prev_position())
+            Display.deferred_blit(render_struct)
 
 
 class InputComponent(Component):
