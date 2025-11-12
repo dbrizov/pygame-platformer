@@ -22,7 +22,6 @@ class Physics:
         while Physics._accumulator >= Physics.fixed_delta_time:
             for entity in entities:
                 entity._physics_tick(Physics.fixed_delta_time)
-
             Physics._accumulator -= Physics.fixed_delta_time
 
         Physics._interpolation_fraction = (Physics._accumulator / Physics.fixed_delta_time) if Physics.interpolation else 1.0
