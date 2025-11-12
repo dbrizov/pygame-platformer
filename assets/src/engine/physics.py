@@ -5,6 +5,7 @@ from typing import Iterable
 
 class Physics:
     _accumulator: float  # Used to accumulate how many physics ticks should happen each frame
+    _interpolation_fraction: float
     fixed_delta_time: float
     interpolation: bool
 
@@ -15,15 +16,17 @@ class Physics:
         Physics.interpolation = interpolation
 
     @staticmethod
-    def _tick(entities: Iterable[Entity], frame_delta_time: float) -> float:
+    def _tick(entities: Iterable[Entity], frame_delta_time: float):
         Physics._accumulator += frame_delta_time
 
         while Physics._accumulator >= Physics.fixed_delta_time:
             for entity in entities:
-                if entity.is_ticking() and entity.is_in_play():
-                    entity._physics_tick(Physics.fixed_delta_time)
+                entity._physics_tick(Physics.fixed_delta_time)
 
             Physics._accumulator -= Physics.fixed_delta_time
 
-        interpolation_fraction = (Physics._accumulator / Physics.fixed_delta_time) if Physics.interpolation else 1.0
-        return interpolation_fraction
+        Physics._interpolation_fraction = (Physics._accumulator / Physics.fixed_delta_time) if Physics.interpolation else 1.0
+
+    @staticmethod
+    def get_interpolation_fraction() -> float:
+        return Physics._interpolation_fraction

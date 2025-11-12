@@ -36,19 +36,18 @@ class GameLoop:
             # Engine._tick()
             Input._tick(delta_time)
 
-            entities = EntitySpawner.get_entities()
-            for entity in entities:
-                if entity.is_ticking() and entity.is_in_play():
-                    entity._tick(scaled_delta_time)
+            tickable_entities = EntitySpawner.get_tickable_entities()
+            for entity in tickable_entities:
+                entity._tick(scaled_delta_time)
 
             # Engine._physics_tick()
-            interpolation_fraction = Physics._tick(entities, scaled_delta_time)
+            Physics._tick(tickable_entities, scaled_delta_time)
 
             # Engine._render_tick()
+            entities = EntitySpawner.get_entities()
             for entity in entities:
-                if entity.is_ticking() and entity.is_in_play():
-                    entity._render_tick(scaled_delta_time)
+                entity._render_tick(scaled_delta_time)
 
-            Display.render_frame(interpolation_fraction)
+            Display.render_frame(Physics.get_interpolation_fraction())
 
         pygame.quit()

@@ -7,7 +7,6 @@ from engine.color import Color
 class BackgroundEntity(Entity):
     def __init__(self, priority: int = 0):
         super().__init__(priority)
-        self._is_ticking = True
         self._surface = pygame.Surface(Display.get_size())
         self._surface.fill(Color(14, 219, 248))
 

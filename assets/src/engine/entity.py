@@ -75,6 +75,7 @@ class Entity:
 
 class EntitySpawner:
     _entities = SortedSet(key=(lambda entity: entity._priority))
+    _tickable_entities: list[Entity] = list()
     _entity_spawn_requests = SortedList(key=(lambda entity: entity._priority))
     _entity_destroy_requests = SortedList(key=(lambda entity: entity._priority))
 
@@ -82,6 +83,16 @@ class EntitySpawner:
     def get_entities() -> Iterable[Entity]:
         """Get all active entities"""
         return EntitySpawner._entities
+
+    @staticmethod
+    def get_tickable_entities() -> Iterable[Entity]:
+        """Get all active entities that are set to tick"""
+        EntitySpawner._tickable_entities.clear()
+        for entity in EntitySpawner._entities:
+            if entity.is_ticking():
+                EntitySpawner._tickable_entities.append(entity)
+
+        return EntitySpawner._tickable_entities
 
     @staticmethod
     def spawn_entity(entity_class: Type[TEntity], priority: int = 0, *args: Any) -> Entity:
