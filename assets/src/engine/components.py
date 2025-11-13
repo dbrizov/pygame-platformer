@@ -85,8 +85,7 @@ class ImageComponent(Component):
         """An `Image Component` renders an image on the screen.
 
         Params:
-            img_path (str): The path to the image asset so it can be loaded
-            color_key (Color): Transparent color key. All pixels matching this key will be transparent
+            image (pygame.Surface): The image to render.
         """
         super().__init__(priority)
         self.image = image

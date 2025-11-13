@@ -1,11 +1,10 @@
-import pygame
 from engine.math import Vec2
 from engine.color import Color
 from engine.time import Time
 from engine.entity import Entity
 from engine.components import InputComponent, ImageComponent
 from engine.input import InputEventType
-from engine.graphics import Graphics
+from engine.assets import Assets
 from ninjagame.data import Data
 
 
@@ -19,9 +18,7 @@ class PlayerEntity(Entity):
 
         self._input_component = self.add_component(InputComponent())
 
-        image = pygame.image.load(Data.asset_path("data", "images", "entities", "player.png")).convert()
-        image.set_colorkey(Color.black())
-        image = pygame.transform.scale_by(image, Graphics.scale)
+        image = Assets.load_image(Data.asset_path("data", "images", "entities", "player.png"), colorkey=Color.black())
         self._image_component = self.add_component(ImageComponent(image))
 
     def _enter_play(self):
